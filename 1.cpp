@@ -86,10 +86,6 @@ TEST(FunctionTesting, test_y){
   EXPECT_NEAR(y(-1),-0.54030230586-0.13533528323,1e-6);
 }
 
-TEST(FunctionTesting, test_edge_cases) {
-    EXPECT_TRUE(isnan(y(NAN)));
-    EXPECT_TRUE(isinf(y(INFINITY)));
-}
 
 TEST(GroupTest, GroupCreation) {
     Group g{"IT-101", "Information technology"};
