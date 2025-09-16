@@ -26,7 +26,7 @@ jobs:
       run: g++ -std=c++14 -fprofile-arcs -ftest-coverage -g -O0 1.cpp -o program -lgtest -lgtest_main -pthread
 
     - name: Run tests
-      run: ./main test
+      run: ./program test  # Исправлено: было ./main test
 
     - name: Generate coverage report
       run: |
