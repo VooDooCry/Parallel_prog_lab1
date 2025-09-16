@@ -1,4 +1,4 @@
-name: C/C++ CI
+name: C/C++ CI with Coverage
 
 on:
   push:
@@ -14,10 +14,29 @@ jobs:
     - uses: actions/checkout@v4
     
     - name: Install dependencies
-      run: sudo apt-get update && sudo apt-get install -y libgtest-dev build-essential
-    
-    - name: Compile
-      run: g++ -std=c++14 -o main 1.cpp -lgtest -lgtest_main -pthread
-    
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          libgtest-dev \
+          build-essential \
+          lcov \
+          gcovr
+
+    - name: Compile with coverage
+      run: g++ -std=c++14 --coverage -o main 1.cpp -lgtest -lgtest_main -pthread
+
     - name: Run tests
       run: ./main test
+
+    - name: Generate coverage report
+      run: |
+        gcovr --root . --exclude-directories test --print-summary --xml -o coverage.xml
+        gcovr --root . --exclude-directories test --branches
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage.xml
+        flags: unittests
+        name: codecov-umbrella
+        fail_ci_if_error: false

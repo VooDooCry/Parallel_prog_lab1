@@ -112,24 +112,26 @@ TEST(GroupTest, AvailableGroupsSize) {
 }
 
 TEST(StudentTest, GroupSelectionTest) {
-    // Тест валидного выбора
+    
     Group group1 = selectGroup(1);
     EXPECT_EQ(group1.name, "IT-101");
     
-    // Тест невалидного выбора
     Group defaultGroup = selectGroup(999);
     EXPECT_EQ(defaultGroup.name, "IT-101");
 }
 
 int main(int argc, char **argv)
 {
-    // Запуск тестов если передан аргумент
+    #ifdef COVERAGE
+    std::cout << "Running with code coverage instrumentation" << std::endl;
+    #endif
+   
     if (argc > 1 && string(argv[1]) == "test") {
         ::testing::InitGoogleTest(&argc, argv);
         return RUN_ALL_TESTS();
     }
 
-    // Основная логика программы
+
     vector<Student> students;
     char choice;
     
