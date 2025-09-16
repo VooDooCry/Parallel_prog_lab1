@@ -85,6 +85,32 @@ TEST(FunctionTesting, test_y){
   EXPECT_NEAR(y(-1),-0.54030230586-0.13533528323,1e-6);
 }
 
+TEST(GroupTest, GroupCreation) {
+    Group g{"ИТ-101", "Информационные технологии"};
+    EXPECT_EQ(g.name, "ИТ-101");
+    EXPECT_EQ(g.faculty, "Информационные технологии");
+}
+
+TEST(StudentTest, StudentCreation) {
+    Group g{"ИТ-102", "Информационные технологии"};
+    Student s{"Иван Иванов", g};
+    
+    EXPECT_EQ(s.name, "Иван Иванов");
+    EXPECT_EQ(s.group.name, "ИТ-102");
+    EXPECT_EQ(s.group.faculty, "Информационные технологии");
+}
+
+TEST(GroupTest, AvailableGroupsSize) {
+    EXPECT_GE(availableGroups.size(), 4); 
+}
+
+TEST(StudentTest, DefaultGroupAssignment) {
+    Student s = addStudent();
+    EXPECT_FALSE(s.name.empty());
+    EXPECT_FALSE(s.group.name.empty());
+    EXPECT_FALSE(s.group.faculty.empty());
+}
+
 int main(int argc, char **argv)
 {
    ::testing::InitGoogleTest(&argc, argv);
