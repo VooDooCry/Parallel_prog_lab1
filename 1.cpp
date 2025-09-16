@@ -1,5 +1,7 @@
 #include <iostream>
 #include <math.h>
+#include <vector>
+#include <string>
 #include "gtest/gtest.h"
 
 //2. y=x^3 cos(x) - e^(2x)
@@ -28,6 +30,41 @@ double addend2(double x)
 double y(double x)
 {
 	return  addend1(x)-addend2(x);
+}
+
+vector<Group> availableGroups = {
+    {"ИТ-101", "Информационные технологии"},
+    {"ИТ-102", "Информационные технологии"},
+    {"ФИ-201", "Физика"},
+    {"МАТ-301", "Математика"}
+};
+
+void displayGroups() {
+    cout << "Доступные группы:\n";
+    for (size_t i = 0; i < availableGroups.size(); ++i) {
+        cout << i + 1 << ". " << availableGroups[i].name 
+             << " (" << availableGroups[i].faculty << ")\n";
+    }
+}
+
+Student addStudent() {
+    Student newStudent;
+    cout << "Введите имя студента: ";
+    cin >> newStudent.name;
+    
+    displayGroups();
+    cout << "Выберите группу (1-" << availableGroups.size() << "): ";
+    int choice;
+    cin >> choice;
+    
+    if (choice > 0 && choice <= availableGroups.size()) {
+        newStudent.group = availableGroups[choice - 1];
+    } else {
+        cout << "Неверный выбор, назначена группа по умолчанию\n";
+        newStudent.group = availableGroups[0];
+    }
+    
+    return newStudent;
 }
 
 TEST(FunctionTesting, test_addend1) {
