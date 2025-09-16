@@ -3,9 +3,7 @@
 #include <vector>
 #include <string>
 #include "gtest/gtest.h"
-
 //2. y=x^3 cos(x) - e^(2x)
-
 using namespace std;
 
 struct Group {
