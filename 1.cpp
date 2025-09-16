@@ -10,6 +10,7 @@ using namespace std;
 
 struct Group {
     string name;
+    string faculty;
 };
 
 
@@ -33,14 +34,14 @@ double y(double x)
 }
 
 vector<Group> availableGroups = {
-    {"ИТ-101", "Информационные технологии"},
-    {"ИТ-102", "Информационные технологии"},
-    {"ФИ-201", "Физика"},
-    {"МАТ-301", "Математика"}
+    {"IT-101", "Information technology"},
+    {"IT-102", "Information technology"},
+    {"PH-201", "Physics"},
+    {"MAT-301", "Mathematics"}
 };
 
 void displayGroups() {
-    cout << "Доступные группы:\n";
+    cout << "Available groups:\n";
     for (size_t i = 0; i < availableGroups.size(); ++i) {
         cout << i + 1 << ". " << availableGroups[i].name 
              << " (" << availableGroups[i].faculty << ")\n";
@@ -49,18 +50,18 @@ void displayGroups() {
 
 Student addStudent() {
     Student newStudent;
-    cout << "Введите имя студента: ";
+    cout << "Enter the student's name:";
     cin >> newStudent.name;
     
     displayGroups();
-    cout << "Выберите группу (1-" << availableGroups.size() << "): ";
+    cout << "Select a group (1-" << availableGroups.size() << "): ";
     int choice;
     cin >> choice;
     
     if (choice > 0 && choice <= availableGroups.size()) {
         newStudent.group = availableGroups[choice - 1];
     } else {
-        cout << "Неверный выбор, назначена группа по умолчанию\n";
+        cout << "Incorrect selection, default group assigned\n";
         newStudent.group = availableGroups[0];
     }
     
@@ -85,19 +86,24 @@ TEST(FunctionTesting, test_y){
   EXPECT_NEAR(y(-1),-0.54030230586-0.13533528323,1e-6);
 }
 
-TEST(GroupTest, GroupCreation) {
-    Group g{"ИТ-101", "Информационные технологии"};
-    EXPECT_EQ(g.name, "ИТ-101");
-    EXPECT_EQ(g.faculty, "Информационные технологии");
+TEST(FunctionTesting, test_edge_cases) {
+    EXPECT_TRUE(isnan(y(NAN)));
+    EXPECT_TRUE(isinf(y(INFINITY)));
 }
 
-TEST(StudentTest, StudentCreation) {
-    Group g{"ИТ-102", "Информационные технологии"};
-    Student s{"Иван Иванов", g};
+TEST(GroupTest, GroupCreation) {
+    Group g{"IT-101", "Information technology"};
+    EXPECT_EQ(g.name, "IT-101");
+    EXPECT_EQ(g.faculty, "Information technology");
+}
+
+TEST(StudentTest, StudentWithDefaultGroup) {
+    Group defaultGroup = availableGroups[0];
+    Student s{"Test Student", defaultGroup};
     
-    EXPECT_EQ(s.name, "Иван Иванов");
-    EXPECT_EQ(s.group.name, "ИТ-102");
-    EXPECT_EQ(s.group.faculty, "Информационные технологии");
+    EXPECT_EQ(s.name, "Test Student");
+    EXPECT_EQ(s.group.name, "IT-101");
+    EXPECT_EQ(s.group.faculty, "Information technology");
 }
 
 TEST(GroupTest, AvailableGroupsSize) {
@@ -113,21 +119,27 @@ TEST(StudentTest, DefaultGroupAssignment) {
 
 int main(int argc, char **argv)
 {
-  vector<Student> students;
+    // Запуск тестов если передан аргумент
+    if (argc > 1 && string(argv[1]) == "test") {
+        ::testing::InitGoogleTest(&argc, argv);
+        return RUN_ALL_TESTS();
+    }
+
+    // Основная логика программы
+    vector<Student> students;
     char choice;
     
     do {
         students.push_back(addStudent());
-        cout << "Добавить еще одного студента? (y/n): ";
+        cout << "Add another student? (y/n): ";
         cin >> choice;
     } while (choice == 'y' || choice == 'Y');
     
-    cout << "\nДобавленные студенты:\n";
+    cout << "\nAdded students:\n";
     for (const auto& student : students) {
         cout << student.name << " - " << student.group.name 
              << " (" << student.group.faculty << ")\n";
     }
 
-   ::testing::InitGoogleTest(&argc, argv);
-   return RUN_ALL_TESTS();
+    return 0;
 }

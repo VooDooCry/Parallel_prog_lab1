@@ -1,0 +1,10 @@
+{
+	"InstallScripts" : 
+	[
+		"C:/Users/Daniel.LILCHILL/Desktop/lab1_par/Parallel_prog_lab1/build/cmake_install.cmake",
+		"C:/Users/Daniel.LILCHILL/Desktop/lab1_par/Parallel_prog_lab1/build/_deps/googletest-build/cmake_install.cmake",
+		"C:/Users/Daniel.LILCHILL/Desktop/lab1_par/Parallel_prog_lab1/build/_deps/googletest-build/googlemock/cmake_install.cmake",
+		"C:/Users/Daniel.LILCHILL/Desktop/lab1_par/Parallel_prog_lab1/build/_deps/googletest-build/googletest/cmake_install.cmake"
+	],
+	"Parallel" : false
+}
