@@ -160,6 +160,8 @@ CMakeFiles/run_tests.dir/1.cpp.obj: \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_vector.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_bvector.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/vector.tcc \
+ C:/msys64/ucrt64/include/c++/14.2.0/sstream \
+ C:/msys64/ucrt64/include/c++/14.2.0/bits/sstream.tcc \
  C:/Users/Daniel.LILCHILL/Desktop/lab1_par/Parallel_prog_lab1/build/_deps/googletest-src/googletest/include/gtest/gtest.h \
  C:/msys64/ucrt64/include/c++/14.2.0/cstdint \
  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stdint.h \
@@ -174,8 +176,6 @@ CMakeFiles/run_tests.dir/1.cpp.obj: \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/locale_facets_nonio.tcc \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/locale_conv.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/quoted_string.h \
- C:/msys64/ucrt64/include/c++/14.2.0/sstream \
- C:/msys64/ucrt64/include/c++/14.2.0/bits/sstream.tcc \
  C:/msys64/ucrt64/include/c++/14.2.0/memory \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_tempbuf.h \
  C:/msys64/ucrt64/include/c++/14.2.0/bits/stl_raw_storage_iter.h \

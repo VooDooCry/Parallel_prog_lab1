@@ -23,7 +23,7 @@ jobs:
           gcovr
 
     - name: Compile with coverage
-      run: g++ -std=c++14 --coverage -o main 1.cpp -lgtest -lgtest_main -pthread
+      run: g++ -std=c++14 -fprofile-arcs -ftest-coverage -g -O0 1.cpp -o program -lgtest -lgtest_main -pthread
 
     - name: Run tests
       run: ./main test
