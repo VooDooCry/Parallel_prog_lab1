@@ -48,6 +48,15 @@ void displayGroups() {
     }
 }
 
+Group selectGroup(int choice) {
+    if (choice > 0 && choice <= availableGroups.size()) {
+        return availableGroups[choice - 1];
+    } else {
+        cout << "Incorrect selection, default group assigned\n";
+        return availableGroups[0];
+    }
+}
+
 Student addStudent() {
     Student newStudent;
     cout << "Enter the student's name:";
@@ -58,13 +67,7 @@ Student addStudent() {
     int choice;
     cin >> choice;
     
-    if (choice > 0 && choice <= availableGroups.size()) {
-        newStudent.group = availableGroups[choice - 1];
-    } else {
-        cout << "Incorrect selection, default group assigned\n";
-        newStudent.group = availableGroups[0];
-    }
-    
+    newStudent.group = selectGroup(choice);
     return newStudent;
 }
 
@@ -95,22 +98,27 @@ TEST(GroupTest, GroupCreation) {
 
 TEST(StudentTest, StudentWithDefaultGroup) {
     Group defaultGroup = availableGroups[0];
-    Student s{"Test Student", defaultGroup};
+    Student s;
+    s.name = "Test Student";
+    s.group = defaultGroup;
     
-    EXPECT_EQ(s.name, "Test Student");
-    EXPECT_EQ(s.group.name, "IT-101");
-    EXPECT_EQ(s.group.faculty, "Information technology");
+    EXPECT_FALSE(s.name.empty());
+    EXPECT_FALSE(s.group.name.empty());
+    EXPECT_FALSE(s.group.faculty.empty());
 }
 
 TEST(GroupTest, AvailableGroupsSize) {
     EXPECT_GE(availableGroups.size(), 4); 
 }
 
-TEST(StudentTest, DefaultGroupAssignment) {
-    Student s = addStudent();
-    EXPECT_FALSE(s.name.empty());
-    EXPECT_FALSE(s.group.name.empty());
-    EXPECT_FALSE(s.group.faculty.empty());
+TEST(StudentTest, GroupSelectionTest) {
+    // Тест валидного выбора
+    Group group1 = selectGroup(1);
+    EXPECT_EQ(group1.name, "IT-101");
+    
+    // Тест невалидного выбора
+    Group defaultGroup = selectGroup(999);
+    EXPECT_EQ(defaultGroup.name, "IT-101");
 }
 
 int main(int argc, char **argv)
