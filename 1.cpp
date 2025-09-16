@@ -113,6 +113,21 @@ TEST(StudentTest, DefaultGroupAssignment) {
 
 int main(int argc, char **argv)
 {
+  vector<Student> students;
+    char choice;
+    
+    do {
+        students.push_back(addStudent());
+        cout << "Добавить еще одного студента? (y/n): ";
+        cin >> choice;
+    } while (choice == 'y' || choice == 'Y');
+    
+    cout << "\nДобавленные студенты:\n";
+    for (const auto& student : students) {
+        cout << student.name << " - " << student.group.name 
+             << " (" << student.group.faculty << ")\n";
+    }
+
    ::testing::InitGoogleTest(&argc, argv);
    return RUN_ALL_TESTS();
 }
