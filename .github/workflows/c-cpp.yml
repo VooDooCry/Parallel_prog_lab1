@@ -26,15 +26,10 @@ jobs:
       run: g++ -std=c++14 --coverage -o main 1.cpp -lgtest -lgtest_main -pthread
 
     - name: Run tests
-      run: ./main
+      run: ./main test
 
     - name: Generate coverage report
       run: |
-        # Generate lcov info file
-        lcov --capture --directory . --output-file coverage.info
-        lcov --remove coverage.info '/usr/*' --output-file coverage.info
-        
-        # Generate XML report (optional)
         gcovr --root . --exclude-directories test --print-summary --xml -o coverage.xml
         gcovr --root . --exclude-directories test --branches
 
