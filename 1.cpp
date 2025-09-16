@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <sstream>
+#include <limits>
 #include "gtest/gtest.h"
 
 using namespace std;
@@ -60,22 +61,21 @@ Student addStudent(const string& name, int groupChoice) {
     return newStudent;
 }
 
-// Функция для интерактивного добавления студента (для основной программы)
 Student addStudentInteractive() {
     Student newStudent;
     cout << "Enter the student's name: ";
-    cin >> newStudent.name;
+    getline(cin, newStudent.name);
     
     displayGroups();
     cout << "Select a group (1-" << availableGroups.size() << "): ";
     int choice;
     cin >> choice;
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
     
     newStudent.group = selectGroup(choice);
     return newStudent;
 }
 
-// Тесты для математических функций
 TEST(FunctionTesting, test_addend1) {
     EXPECT_NEAR(addend1(0), 0.0, 1e-6);
     EXPECT_NEAR(addend1(1), 0.54030230586, 1e-6);
@@ -96,7 +96,6 @@ TEST(FunctionTesting, test_y) {
     EXPECT_NEAR(y(-1), -0.54030230586-0.13533528323, 1e-6);
 }
 
-// Тесты для структур данных
 TEST(GroupTest, GroupCreation) {
     Group g{"IT-101", "Information technology"};
     EXPECT_EQ(g.name, "IT-101");
@@ -118,7 +117,6 @@ TEST(GroupTest, AvailableGroupsSize) {
     EXPECT_EQ(availableGroups.size(), 4);
 }
 
-// Тесты для выбора группы
 TEST(GroupTest, SelectGroupValid) {
     Group g = selectGroup(2);
     EXPECT_EQ(g.name, "IT-102");
@@ -133,7 +131,6 @@ TEST(GroupTest, SelectGroupInvalid) {
     EXPECT_EQ(g.name, "IT-101");
 }
 
-// Тесты для добавления студентов
 TEST(StudentTest, AddStudent) {
     Student s = addStudent("Test Student", 3);
     EXPECT_EQ(s.name, "Test Student");
@@ -141,7 +138,6 @@ TEST(StudentTest, AddStudent) {
     EXPECT_EQ(s.group.faculty, "Physics");
 }
 
-// Тест для отображения групп (перехватываем вывод)
 TEST(GroupTest, DisplayGroupsTest) {
     stringstream buffer;
     streambuf* oldCout = cout.rdbuf(buffer.rdbuf());
@@ -156,13 +152,31 @@ TEST(GroupTest, DisplayGroupsTest) {
     EXPECT_NE(output.find("Physics"), string::npos);
 }
 
-// Функция для запуска в тестовом режиме
+TEST(StudentTest, AddStudentInteractiveTest) {
+    streambuf* origCin = cin.rdbuf();
+    streambuf* origCout = cout.rdbuf();
+    
+    stringstream testInput;
+    testInput << "John Doe\n2\n";
+    cin.rdbuf(testInput.rdbuf());
+    
+    stringstream testOutput;
+    cout.rdbuf(testOutput.rdbuf());
+    
+    Student s = addStudentInteractive();
+    
+    cin.rdbuf(origCin);
+    cout.rdbuf(origCout);
+    
+    EXPECT_EQ(s.name, "John Doe");
+    EXPECT_EQ(s.group.name, "IT-102");
+}
+
 int runTests() {
     testing::InitGoogleTest();
     return RUN_ALL_TESTS();
 }
 
-// Функция для запуска в интерактивном режиме
 int runInteractive() {
     vector<Student> students;
     char choice;
@@ -171,6 +185,7 @@ int runInteractive() {
         students.push_back(addStudentInteractive());
         cout << "Add another student? (y/n): ";
         cin >> choice;
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
     } while (choice == 'y' || choice == 'Y');
     
     cout << "\nAdded students:\n";
@@ -180,6 +195,72 @@ int runInteractive() {
     }
 
     return 0;
+}
+
+TEST(InteractiveTest, RunInteractiveSingleStudent) {
+    streambuf* origCin = cin.rdbuf();
+    streambuf* origCout = cout.rdbuf();
+    
+    stringstream testInput;
+    testInput << "Alice Smith\n1\nn\n";
+    cin.rdbuf(testInput.rdbuf());
+    
+    stringstream testOutput;
+    cout.rdbuf(testOutput.rdbuf());
+    
+    runInteractive();
+    
+    cin.rdbuf(origCin);
+    cout.rdbuf(origCout);
+    
+    string output = testOutput.str();
+    EXPECT_NE(output.find("Added students:"), string::npos);
+    EXPECT_NE(output.find("Alice Smith"), string::npos);
+    EXPECT_NE(output.find("IT-101"), string::npos);
+}
+
+TEST(InteractiveTest, RunInteractiveTwoStudents) {
+    streambuf* origCin = cin.rdbuf();
+    streambuf* origCout = cout.rdbuf();
+    
+    stringstream testInput;
+    testInput << "Bob Johnson\n2\ny\nCharlie Brown\n3\nn\n";
+    cin.rdbuf(testInput.rdbuf());
+    
+    stringstream testOutput;
+    cout.rdbuf(testOutput.rdbuf());
+    
+    runInteractive();
+    
+    cin.rdbuf(origCin);
+    cout.rdbuf(origCout);
+    
+    string output = testOutput.str();
+    EXPECT_NE(output.find("Bob Johnson"), string::npos);
+    EXPECT_NE(output.find("Charlie Brown"), string::npos);
+    EXPECT_NE(output.find("IT-102"), string::npos);
+    EXPECT_NE(output.find("PH-201"), string::npos);
+}
+
+TEST(InteractiveTest, RunInteractiveInvalidGroup) {
+    streambuf* origCin = cin.rdbuf();
+    streambuf* origCout = cout.rdbuf();
+    
+    stringstream testInput;
+    testInput << "Test Student\n999\nn\n";
+    cin.rdbuf(testInput.rdbuf());
+    
+    stringstream testOutput;
+    cout.rdbuf(testOutput.rdbuf());
+    
+    runInteractive();
+    
+    cin.rdbuf(origCin);
+    cout.rdbuf(origCout);
+    
+    string output = testOutput.str();
+    EXPECT_NE(output.find("Incorrect selection"), string::npos);
+    EXPECT_NE(output.find("IT-101"), string::npos); // Должна быть выбрана группа по умолчанию
 }
 
 int main(int argc, char **argv) {
