@@ -6,6 +6,16 @@
 
 using namespace std;
 
+struct Group {
+    string name;
+};
+
+
+struct Student {
+    string name;
+    Group group;
+};
+
 double addend1(double x)
 {
 	return x*x*x * cos(x);
